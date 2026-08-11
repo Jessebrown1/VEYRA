@@ -4,7 +4,7 @@ import re
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from ..ollama_client import chat_completion
+from ..llm_client import chat_completion
 
 router = APIRouter(prefix="/memory", tags=["memory"])
 

@@ -3,7 +3,7 @@ from typing import Optional
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from ..ollama_client import chat_completion
+from ..llm_client import chat_completion
 from ..prompts import build_system_prompt
 
 router = APIRouter(prefix="/generate", tags=["generate"])

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from ..ollama_client import embed_text
+from ..llm_client import embed_text
 
 router = APIRouter(prefix="/embed", tags=["embed"])
 
