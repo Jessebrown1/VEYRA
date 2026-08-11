@@ -86,6 +86,11 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void updateUser(UserProfile updated) {
+    user = updated;
+    notifyListeners();
+  }
+
   Future<void> signOut() async {
     await authApi.logout();
     user = null;

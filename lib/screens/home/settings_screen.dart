@@ -8,6 +8,11 @@ import '../../theme/app_effects.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_text_styles.dart';
 import '../auth/welcome_screen.dart';
+import 'settings/account_settings_screen.dart';
+import 'settings/data_controls_screen.dart';
+import 'settings/location_settings_screen.dart';
+import 'settings/notifications_settings_screen.dart';
+import 'settings/privacy_settings_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -17,16 +22,11 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  static const _placeholderItems = [
-    (Icons.person_outline, 'Account'),
-    (Icons.notifications_outlined, 'Notifications'),
-    (Icons.location_on_outlined, 'Location'),
-    (Icons.auto_awesome_outlined, 'Memory'),
-    (Icons.shield_outlined, 'Privacy'),
-    (Icons.download_outlined, 'Data controls'),
-  ];
-
   bool _togglingPlus = false;
+
+  void _open(Widget screen) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => screen));
+  }
 
   Future<void> _togglePlus(bool value) async {
     setState(() => _togglingPlus = true);
@@ -123,7 +123,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: AppSpacing.lg),
           const _BiometricSection(),
           const SizedBox(height: AppSpacing.lg),
-          for (final (icon, label) in _placeholderItems) _SettingsRow(icon: icon, label: label),
+          _SettingsRow(
+            icon: Icons.person_outline,
+            label: 'Account',
+            onTap: () => _open(const AccountSettingsScreen()),
+          ),
+          _SettingsRow(
+            icon: Icons.notifications_outlined,
+            label: 'Notifications',
+            onTap: () => _open(const NotificationsSettingsScreen()),
+          ),
+          _SettingsRow(
+            icon: Icons.location_on_outlined,
+            label: 'Location',
+            onTap: () => _open(const LocationSettingsScreen()),
+          ),
+          _SettingsRow(
+            icon: Icons.auto_awesome_outlined,
+            label: 'Memory',
+          ),
+          _SettingsRow(
+            icon: Icons.shield_outlined,
+            label: 'Privacy',
+            onTap: () => _open(const PrivacySettingsScreen()),
+          ),
+          _SettingsRow(
+            icon: Icons.download_outlined,
+            label: 'Data controls',
+            onTap: () => _open(const DataControlsScreen()),
+          ),
           const SizedBox(height: AppSpacing.lg),
           _SettingsRow(
             icon: Icons.logout,

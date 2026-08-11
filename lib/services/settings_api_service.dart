@@ -23,28 +23,51 @@ class SettingsApiService {
     }
   }
 
-  Future<void> updateNotificationSettings({
-    required bool enabled,
+  Future<Map<String, dynamic>> updateNotificationSettings({
+    bool? enabled,
     bool? companionCheckins,
     bool? sleepReminders,
+    bool? quietHoursEnabled,
+    String? quietStart,
+    String? quietEnd,
+    String? frequency,
   }) async {
     try {
-      await _client.dio.patch('/notifications/settings', data: {
-        'enabled': enabled,
+      final res = await _client.dio.patch('/notifications/settings', data: {
+        if (enabled != null) 'enabled': enabled,
         if (companionCheckins != null) 'companionCheckins': companionCheckins,
         if (sleepReminders != null) 'sleepReminders': sleepReminders,
+        if (quietHoursEnabled != null) 'quietHoursEnabled': quietHoursEnabled,
+        if (quietStart != null) 'quietStart': quietStart,
+        if (quietEnd != null) 'quietEnd': quietEnd,
+        if (frequency != null) 'frequency': frequency,
       });
+      return res.data as Map<String, dynamic>;
     } catch (e) {
       throw ApiClient.toApiException(e);
     }
   }
 
-  Future<void> updateLocationSettings({required bool enabled, String? permissionType}) async {
+  Future<Map<String, dynamic>> updateLocationSettings({
+    bool? enabled,
+    String? permissionType,
+    String? lastArea,
+  }) async {
     try {
-      await _client.dio.patch('/location/settings', data: {
-        'enabled': enabled,
+      final res = await _client.dio.patch('/location/settings', data: {
+        if (enabled != null) 'enabled': enabled,
         if (permissionType != null) 'permissionType': permissionType,
+        if (lastArea != null) 'lastArea': lastArea,
       });
+      return res.data as Map<String, dynamic>;
+    } catch (e) {
+      throw ApiClient.toApiException(e);
+    }
+  }
+
+  Future<void> clearAllMemories(String companionId) async {
+    try {
+      await _client.dio.post('/companions/$companionId/memories/clear');
     } catch (e) {
       throw ApiClient.toApiException(e);
     }

@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch } from '@nestjs/common';
 import { CurrentUser, type AuthenticatedUser } from '../common/decorators/current-user.decorator';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
@@ -15,5 +16,20 @@ export class UsersController {
   @Patch('me')
   update(@CurrentUser() user: AuthenticatedUser, @Body() dto: UpdateUserDto) {
     return this.usersService.update(user.userId, dto);
+  }
+
+  @Patch('me/password')
+  changePassword(@CurrentUser() user: AuthenticatedUser, @Body() dto: ChangePasswordDto) {
+    return this.usersService.changePassword(user.userId, dto);
+  }
+
+  @Get('me/export')
+  exportData(@CurrentUser() user: AuthenticatedUser) {
+    return this.usersService.exportData(user.userId);
+  }
+
+  @Delete('me')
+  deleteAccount(@CurrentUser() user: AuthenticatedUser) {
+    return this.usersService.deleteAccount(user.userId);
   }
 }

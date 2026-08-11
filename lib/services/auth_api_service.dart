@@ -53,4 +53,34 @@ class AuthApiService {
   }
 
   Future<void> logout() => ApiClient.clearToken();
+
+  Future<void> changePassword({required String currentPassword, required String newPassword}) async {
+    try {
+      await _client.dio.patch('/users/me/password', data: {
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+      });
+    } catch (e) {
+      throw ApiClient.toApiException(e);
+    }
+  }
+
+  Future<Map<String, dynamic>> exportData() async {
+    try {
+      final res = await _client.dio.get('/users/me/export');
+      return res.data as Map<String, dynamic>;
+    } catch (e) {
+      throw ApiClient.toApiException(e);
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      await _client.dio.delete('/users/me');
+    } catch (e) {
+      throw ApiClient.toApiException(e);
+    } finally {
+      await ApiClient.clearToken();
+    }
+  }
 }
