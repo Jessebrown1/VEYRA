@@ -1,5 +1,5 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { MessageSender } from '@prisma/client';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Companion, MessageSender } from '@prisma/client';
 import { AiClientService } from '../ai/ai-client.service';
 import { termsForRelationship } from '../companions/catalog';
 import { CompanionsService } from '../companions/companions.service';
@@ -11,6 +11,8 @@ const FORGET_INTENT = /^\s*forget\s+(that\s+)?/i;
 
 @Injectable()
 export class ConversationsService {
+  private readonly logger = new Logger('ConversationsService');
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly companions: CompanionsService,
@@ -30,28 +32,41 @@ export class ConversationsService {
     const existing = await this.prisma.conversation.findFirst({
       where: { companionId },
       orderBy: { createdAt: 'desc' },
+      include: { _count: { select: { messages: true } } },
     });
-    if (existing) return existing;
 
-    const conversation = await this.prisma.conversation.create({ data: { companionId } });
+    const conversation = existing ?? (await this.prisma.conversation.create({ data: { companionId } }));
 
-    // Seed the brand-new conversation with a real, persisted welcome message —
-    // this is what the onboarding "personalized welcome" screen shows, and it's
-    // still there as the first line of chat history afterwards.
-    const user = await this.prisma.user.findUniqueOrThrow({ where: { id: userId } });
-    const { message } = await this.ai.generateWelcome({
-      companion_name: companion.name,
-      personality_traits: companion.personalityTraits as Record<string, number>,
-      relationship_id: companion.relationshipId,
-      user_preferred_name: companion.preferredUserName,
-      user_term: this.userTermFor(companion),
-      local_hour: this.localHourFor(user.timezone),
-    });
-    await this.prisma.message.create({
-      data: { conversationId: conversation.id, sender: MessageSender.companion, content: message },
-    });
+    // Seed a welcome message whenever the conversation has none yet — covers
+    // both a brand-new conversation and one left empty by a previous attempt
+    // where the AI call failed after the conversation row was already created.
+    if (!existing || existing._count.messages === 0) {
+      await this.seedWelcomeMessage(userId, companion, conversation.id);
+    }
 
     return conversation;
+  }
+
+  private async seedWelcomeMessage(userId: string, companion: Companion, conversationId: string) {
+    try {
+      const user = await this.prisma.user.findUniqueOrThrow({ where: { id: userId } });
+      const { message } = await this.ai.generateWelcome({
+        companion_name: companion.name,
+        personality_traits: companion.personalityTraits as Record<string, number>,
+        relationship_id: companion.relationshipId,
+        user_preferred_name: companion.preferredUserName,
+        user_term: this.userTermFor(companion),
+        local_hour: this.localHourFor(user.timezone),
+      });
+      await this.prisma.message.create({
+        data: { conversationId, sender: MessageSender.companion, content: message },
+      });
+    } catch (err) {
+      // Don't fail conversation creation over a welcome message — the user can
+      // still chat normally, and the next getOrCreateDefault call will retry
+      // seeding since the conversation is still empty.
+      this.logger.warn(`Welcome message seed failed (non-fatal): ${(err as Error).message}`);
+    }
   }
 
   async listMessages(userId: string, conversationId: string) {
