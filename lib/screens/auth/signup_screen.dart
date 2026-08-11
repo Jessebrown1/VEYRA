@@ -10,6 +10,7 @@ import '../../theme/app_text_styles.dart';
 import '../../widgets/primary_button.dart';
 import '../../widgets/veyra_text_field.dart';
 import '../onboarding/personality_screen.dart';
+import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -41,8 +42,17 @@ class _SignupScreenState extends State<SignupScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      final message = ApiClient.toApiException(e).message;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      final exception = ApiClient.toApiException(e);
+      if (exception.code == 'EMAIL_TAKEN') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You already have an account with this email — logging you in instead.')),
+        );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => LoginScreen(initialEmail: _emailController.text.trim())),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(exception.message)));
+      }
     } finally {
       if (mounted) setState(() => _submitting = false);
     }

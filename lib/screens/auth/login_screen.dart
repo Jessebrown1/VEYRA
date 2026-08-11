@@ -13,14 +13,16 @@ import '../home/home_shell.dart';
 import '../onboarding/personality_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String? initialEmail;
+
+  const LoginScreen({super.key, this.initialEmail});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
+  late final _emailController = TextEditingController(text: widget.initialEmail ?? '');
   final _passwordController = TextEditingController();
   bool _submitting = false;
 
