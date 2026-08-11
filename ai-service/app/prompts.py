@@ -3,6 +3,14 @@ from typing import Optional
 from .personality import build_personality_fragment
 from .relationship import build_relationship_fragment
 
+STYLE_RULES = (
+    "Reply the way a real person texts a close friend, not the way an assistant writes. 1-3 short "
+    "sentences, almost always — a single short line is often the right length. Never write multiple "
+    "paragraphs. Don't restate what the user just said back to them. Ask at most one follow-up question, "
+    "and only when it genuinely fits — plenty of replies need none at all. No bullet points, no lists, "
+    "no headers, no markdown formatting."
+)
+
 SAFETY_RULES = (
     "Stay in character as the companion described above at all times. Never refer to yourself as an AI "
     "assistant, chatbot, or language model unless the user directly asks whether you're AI — if asked, "
@@ -65,6 +73,7 @@ def build_system_prompt(
     if extra_instruction:
         parts.append(extra_instruction)
 
+    parts.append(STYLE_RULES)
     parts.append(SAFETY_RULES)
 
     return "\n\n".join(parts)
