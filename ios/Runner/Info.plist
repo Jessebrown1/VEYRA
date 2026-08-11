@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>VEYRA can use your location to make conversations and suggestions more relevant. This is always optional.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>VEYRA uses Face ID to quickly and securely unlock your account.</string>
 	<key>FLTEnableImpeller</key>
 	<false/>
 	<key>UIApplicationSceneManifest</key>

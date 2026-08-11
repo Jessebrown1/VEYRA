@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../services/api_client.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_colors.dart';
@@ -68,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(),
@@ -108,12 +110,12 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: AppSpacing.lg),
               Row(
                 children: [
-                  const Expanded(child: Divider(color: AppColors.divider)),
+                  Expanded(child: Divider(color: AppColors.divider)),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                     child: Text('or', style: AppTextStyles.caption),
                   ),
-                  const Expanded(child: Divider(color: AppColors.divider)),
+                  Expanded(child: Divider(color: AppColors.divider)),
                 ],
               ),
               const SizedBox(height: AppSpacing.md),
@@ -121,10 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () => _notAvailable('Apple'),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(54),
-                  side: const BorderSide(color: AppColors.dividerFaint),
+                  side: BorderSide(color: AppColors.dividerFaint),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                icon: const Icon(Icons.apple, size: 20, color: AppColors.textPrimary),
+                icon: Icon(Icons.apple, size: 20, color: AppColors.textPrimary),
                 label: Text('Continue with Apple', style: AppTextStyles.bodyEmphasis),
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -132,10 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () => _notAvailable('Google'),
                 style: OutlinedButton.styleFrom(
                   minimumSize: const Size.fromHeight(54),
-                  side: const BorderSide(color: AppColors.dividerFaint),
+                  side: BorderSide(color: AppColors.dividerFaint),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                icon: const Icon(Icons.g_mobiledata, size: 24, color: AppColors.textPrimary),
+                icon: Icon(Icons.g_mobiledata, size: 24, color: AppColors.textPrimary),
                 label: Text('Continue with Google', style: AppTextStyles.bodyEmphasis),
               ),
             ],

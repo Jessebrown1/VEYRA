@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../models/memory_entry.dart';
 import '../../services/api_client.dart';
 import '../../state/app_state.dart';
@@ -99,6 +100,7 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final companion = context.watch<AppState>().companion!;
     final memories = _memories;
 
@@ -106,14 +108,14 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(title: Text('Things ${companion.name} remembers')),
       body: memories == null
-          ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
           : memories.isEmpty
               ? Padding(
                   padding: const EdgeInsets.all(AppSpacing.screenPadding),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.auto_awesome_outlined, size: 40, color: AppColors.textMuted),
+                      Icon(Icons.auto_awesome_outlined, size: 40, color: AppColors.textMuted),
                       const SizedBox(height: AppSpacing.md),
                       Text(
                         "As you talk, ${companion.name} will start remembering the things "
@@ -147,7 +149,7 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
                               width: 34,
                               height: 34,
                               margin: const EdgeInsets.only(top: 2),
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: AppColors.elevatedHigh,
                                 shape: BoxShape.circle,
                               ),
@@ -176,7 +178,7 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
                             ),
                             IconButton(
                               onPressed: () => _forget(memory),
-                              icon: const Icon(Icons.close, size: 18, color: AppColors.textMuted),
+                              icon: Icon(Icons.close, size: 18, color: AppColors.textMuted),
                               tooltip: 'Forget',
                             ),
                           ],

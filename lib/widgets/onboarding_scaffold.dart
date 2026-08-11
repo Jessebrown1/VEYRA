@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../state/theme_controller.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_text_styles.dart';
@@ -50,6 +52,7 @@ class _OnboardingScaffoldState extends State<OnboardingScaffold> with SingleTick
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -62,7 +65,7 @@ class _OnboardingScaffoldState extends State<OnboardingScaffold> with SingleTick
                 children: [
                   IconButton(
                     onPressed: () => Navigator.of(context).maybePop(),
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.arrow_back_ios_new,
                       size: 18,
                       color: AppColors.textSecondary,

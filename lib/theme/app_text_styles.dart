@@ -12,14 +12,14 @@ class AppTextStyles {
     required FontWeight weight,
     double? letterSpacing,
     double? height,
-    Color color = AppColors.textPrimary,
+    Color? color,
   }) {
     return GoogleFonts.dmSans(
       fontSize: size,
       fontWeight: weight,
       letterSpacing: letterSpacing,
       height: height,
-      color: color,
+      color: color ?? AppColors.textPrimary,
     );
   }
 

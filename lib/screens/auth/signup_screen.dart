@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../services/api_client.dart';
 import '../../state/app_state.dart';
 import '../../state/onboarding_controller.dart';
@@ -56,6 +57,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(),

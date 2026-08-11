@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_effects.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_text_styles.dart';
 import '../../widgets/primary_button.dart';
-import '../../widgets/secondary_button.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 
@@ -12,6 +14,7 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Stack(
@@ -55,10 +58,21 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: AppSpacing.sm),
-                  SecondaryButton(
-                    label: 'Already have an account? Log in',
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: AppColors.dividerFaint, width: 1.5),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.md)),
+                      ),
+                      child: Text(
+                        'I already have an account',
+                        style: AppTextStyles.bodyEmphasis.copyWith(color: AppColors.textPrimary),
+                      ),
                     ),
                   ),
                   const SizedBox(height: AppSpacing.xl),

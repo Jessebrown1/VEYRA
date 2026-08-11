@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../services/notification_permission_service.dart';
 import '../../state/onboarding_controller.dart';
 import '../../theme/app_colors.dart';
@@ -42,6 +43,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final companionName = context.watch<OnboardingController>().companionName;
 
     return OnboardingScaffold(
@@ -61,7 +63,7 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
                 gradient: AppColors.accentGradient,
                 boxShadow: AppShadows.accentGlowSoft,
               ),
-              child: const Icon(Icons.notifications_none, size: 28, color: AppColors.background),
+              child: Icon(Icons.notifications_none, size: 28, color: AppColors.background),
             ),
             const SizedBox(height: AppSpacing.md),
             Text(

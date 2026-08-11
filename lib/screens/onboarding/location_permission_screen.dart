@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../services/location_service.dart';
 import '../../state/onboarding_controller.dart';
 import '../../theme/app_colors.dart';
@@ -40,6 +41,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return OnboardingScaffold(
       step: 7,
       totalSteps: 8,
@@ -57,7 +59,7 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
                 gradient: AppColors.accentGradient,
                 boxShadow: AppShadows.accentGlowSoft,
               ),
-              child: const Icon(Icons.location_on_outlined, size: 28, color: AppColors.background),
+              child: Icon(Icons.location_on_outlined, size: 28, color: AppColors.background),
             ),
             const SizedBox(height: AppSpacing.md),
             Text(

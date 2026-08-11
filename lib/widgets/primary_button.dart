@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../state/theme_controller.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_effects.dart';
 import '../theme/app_text_styles.dart';
@@ -28,6 +30,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return GestureDetector(
       onTapDown: _active ? (_) => setState(() => _pressed = true) : null,
       onTapCancel: _active ? () => setState(() => _pressed = false) : null,

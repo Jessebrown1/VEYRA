@@ -6,17 +6,26 @@ import 'app_text_styles.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get dark {
+  static ThemeData get dark => _build(AppColors.darkPalette, Brightness.dark);
+
+  static ThemeData get light => _build(AppColors.lightPalette, Brightness.light);
+
+  static ThemeData _build(AppPalette p, Brightness brightness) {
     return ThemeData(
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.background,
-      canvasColor: AppColors.background,
-      primaryColor: AppColors.accent,
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.accent,
-        secondary: AppColors.accent,
-        surface: AppColors.surface,
-        error: AppColors.danger,
+      brightness: brightness,
+      scaffoldBackgroundColor: p.background,
+      canvasColor: p.background,
+      primaryColor: p.accent,
+      colorScheme: ColorScheme(
+        brightness: brightness,
+        primary: p.accent,
+        onPrimary: p.background,
+        secondary: p.accent,
+        onSecondary: p.background,
+        surface: p.surface,
+        onSurface: p.textPrimary,
+        error: p.danger,
+        onError: p.background,
       ),
       textTheme: TextTheme(
         displayLarge: AppTextStyles.display,
@@ -27,26 +36,26 @@ class AppTheme {
         bodySmall: AppTextStyles.caption,
         labelSmall: AppTextStyles.microcopy,
       ),
-      dividerColor: AppColors.divider,
+      dividerColor: p.divider,
       splashFactory: NoSplash.splashFactory,
       highlightColor: Colors.transparent,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background,
+        backgroundColor: p.background,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
         titleTextStyle: AppTextStyles.title,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        iconTheme: IconThemeData(color: p.textPrimary),
       ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: AppColors.elevated,
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: p.elevated,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: p.surface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -54,11 +63,11 @@ class AppTheme {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.dividerFaint),
+          borderSide: BorderSide(color: p.dividerFaint),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(color: AppColors.accent, width: 1.5),
+          borderSide: BorderSide(color: p.accent, width: 1.5),
         ),
         hintStyle: AppTextStyles.body,
       ),

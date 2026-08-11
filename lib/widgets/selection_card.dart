@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../state/theme_controller.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_effects.dart';
 import '../theme/app_spacing.dart';
@@ -24,6 +26,7 @@ class SelectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppRadii.lg),
@@ -69,7 +72,7 @@ class SelectionCard extends StatelessWidget {
                       Text(title.toUpperCase(), style: AppTextStyles.bodyEmphasis.copyWith(letterSpacing: 0.3)),
                       if (isPremium) ...[
                         const SizedBox(width: 6),
-                        const Icon(Icons.lock, size: 13, color: AppColors.champagne),
+                        Icon(Icons.lock, size: 13, color: AppColors.champagne),
                       ],
                     ],
                   ),
@@ -81,8 +84,8 @@ class SelectionCard extends StatelessWidget {
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 150),
               child: isSelected
-                  ? const Icon(Icons.check_circle, color: AppColors.accent, size: 22, key: ValueKey('sel'))
-                  : const Icon(Icons.circle_outlined, color: AppColors.textMuted, size: 22, key: ValueKey('unsel')),
+                  ? Icon(Icons.check_circle, color: AppColors.accent, size: 22, key: const ValueKey('sel'))
+                  : Icon(Icons.circle_outlined, color: AppColors.textMuted, size: 22, key: const ValueKey('unsel')),
             ),
           ],
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../data/personality_catalog.dart';
 import '../../data/relationship_catalog.dart';
 import '../../state/onboarding_controller.dart';
@@ -32,6 +33,7 @@ class RelationshipScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final controller = context.watch<OnboardingController>();
     final selected = controller.relationshipId != null
         ? RelationshipCatalog.byId(controller.relationshipId!)
@@ -61,7 +63,7 @@ class RelationshipScreen extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.format_quote, size: 18, color: AppColors.accent),
+                  Icon(Icons.format_quote, size: 18, color: AppColors.accent),
                   const SizedBox(width: AppSpacing.sm),
                   Expanded(
                     child: Text(

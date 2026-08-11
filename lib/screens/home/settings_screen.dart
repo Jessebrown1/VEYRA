@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../state/app_state.dart';
 import '../../state/onboarding_controller.dart';
 import '../../theme/app_colors.dart';
@@ -40,6 +41,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final appState = context.watch<AppState>();
     final user = appState.user!;
     final isPlus = appState.entitlements.isPlus;
@@ -79,7 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             padding: const EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
               gradient: isPlus
-                  ? const LinearGradient(colors: [AppColors.champagne, AppColors.accent])
+                  ? LinearGradient(colors: [AppColors.champagne, AppColors.accent])
                   : AppColors.cardGradient,
               borderRadius: BorderRadius.circular(AppRadii.lg),
               border: Border.all(color: AppColors.dividerFaint),
@@ -117,6 +119,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
+          const _AppearanceSection(),
+          const SizedBox(height: AppSpacing.lg),
+          const _BiometricSection(),
+          const SizedBox(height: AppSpacing.lg),
           for (final (icon, label) in _placeholderItems) _SettingsRow(icon: icon, label: label),
           const SizedBox(height: AppSpacing.lg),
           _SettingsRow(
@@ -140,6 +146,143 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
+class _AppearanceSection extends StatelessWidget {
+  const _AppearanceSection();
+
+  static const _options = [
+    (ThemeMode.system, Icons.brightness_auto, 'System'),
+    (ThemeMode.light, Icons.light_mode_outlined, 'Light'),
+    (ThemeMode.dark, Icons.dark_mode_outlined, 'Dark'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.watch<ThemeController>();
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        border: Border.all(color: AppColors.dividerFaint),
+      ),
+      child: Row(
+        children: [
+          for (final (mode, icon, label) in _options)
+            Expanded(
+              child: InkWell(
+                borderRadius: BorderRadius.circular(AppRadii.md),
+                onTap: () => controller.setMode(mode),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 180),
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                  decoration: BoxDecoration(
+                    color: controller.mode == mode ? AppColors.accent.withValues(alpha: 0.16) : null,
+                    borderRadius: BorderRadius.circular(AppRadii.md),
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        icon,
+                        size: 18,
+                        color: controller.mode == mode ? AppColors.accent : AppColors.textMuted,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        label,
+                        style: AppTextStyles.microcopy.copyWith(
+                          color: controller.mode == mode ? AppColors.accent : AppColors.textMuted,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BiometricSection extends StatefulWidget {
+  const _BiometricSection();
+
+  @override
+  State<_BiometricSection> createState() => _BiometricSectionState();
+}
+
+class _BiometricSectionState extends State<_BiometricSection> {
+  bool? _available;
+  bool _enabled = false;
+  bool _busy = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _load());
+  }
+
+  Future<void> _load() async {
+    final biometrics = context.read<AppState>().biometrics;
+    final available = await biometrics.isAvailable;
+    final enabled = await biometrics.isEnabled;
+    if (!mounted) return;
+    setState(() {
+      _available = available;
+      _enabled = enabled;
+    });
+  }
+
+  Future<void> _toggle(bool value) async {
+    final biometrics = context.read<AppState>().biometrics;
+    setState(() => _busy = true);
+    if (value) {
+      final confirmed = await biometrics.authenticate(reason: 'Enable biometric unlock for VEYRA');
+      if (confirmed) {
+        await biometrics.setEnabled(true);
+        if (mounted) setState(() => _enabled = true);
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Couldn't verify — biometric unlock wasn't enabled.")),
+        );
+      }
+    } else {
+      await biometrics.setEnabled(false);
+      if (mounted) setState(() => _enabled = false);
+    }
+    if (mounted) setState(() => _busy = false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    context.watch<ThemeController>();
+    final available = _available;
+    if (available == false) return const SizedBox.shrink();
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.smd),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadii.lg),
+        border: Border.all(color: AppColors.dividerFaint),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.fingerprint, size: 19, color: AppColors.textSecondary),
+          const SizedBox(width: AppSpacing.smd),
+          Expanded(
+            child: Text('Biometric unlock', style: AppTextStyles.bodyEmphasis),
+          ),
+          Switch(
+            value: _enabled,
+            onChanged: available == null || _busy ? null : _toggle,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _SettingsRow extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -150,6 +293,7 @@ class _SettingsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return InkWell(
       borderRadius: BorderRadius.circular(AppRadii.lg),
       onTap: onTap ??
@@ -174,7 +318,7 @@ class _SettingsRow extends StatelessWidget {
                 style: AppTextStyles.bodyEmphasis.copyWith(color: danger ? AppColors.danger : AppColors.textPrimary),
               ),
             ),
-            if (!danger) const Icon(Icons.chevron_right, size: 18, color: AppColors.textMuted),
+            if (!danger) Icon(Icons.chevron_right, size: 18, color: AppColors.textMuted),
           ],
         ),
       ),

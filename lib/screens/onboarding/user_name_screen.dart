@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../data/term_of_address_catalog.dart';
 import '../../state/onboarding_controller.dart';
 import '../../theme/app_colors.dart';
@@ -35,6 +36,7 @@ class _UserNameScreenState extends State<UserNameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final controller = context.watch<OnboardingController>();
     final companionName = controller.companionName;
     final terms = TermOfAddressCatalog.forRelationship(controller.relationshipId!);
@@ -44,7 +46,6 @@ class _UserNameScreenState extends State<UserNameScreen> {
       step: 4,
       totalSteps: 8,
       title: 'What should $companionName call you?',
-      subtitle: 'Or choose what feels natural.',
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,9 +60,9 @@ class _UserNameScreenState extends State<UserNameScreen> {
                 hintStyle: AppTextStyles.display.copyWith(color: AppColors.textMuted),
                 filled: false,
                 contentPadding: EdgeInsets.zero,
-                border: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
-                enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
-                focusedBorder: const UnderlineInputBorder(
+                border: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
+                focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: AppColors.accent, width: 2),
                 ),
               ),
@@ -82,7 +83,7 @@ class _UserNameScreenState extends State<UserNameScreen> {
                       Text(term.label),
                       if (term.isPremium) ...[
                         const SizedBox(width: 4),
-                        const Icon(Icons.lock, size: 12, color: AppColors.champagne),
+                        Icon(Icons.lock, size: 12, color: AppColors.champagne),
                       ],
                     ],
                   ),

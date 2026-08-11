@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../state/app_state.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_styles.dart';
+import '../auth/biometric_lock_screen.dart';
 import '../auth/welcome_screen.dart';
 import '../home/home_shell.dart';
 
@@ -45,9 +47,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
 
-    final destination = appState.status == AppLaunchStatus.ready
-        ? const HomeShell()
-        : const WelcomeScreen();
+    Widget destination;
+    if (appState.status == AppLaunchStatus.ready) {
+      final biometricEnabled = await appState.biometrics.isEnabled;
+      destination = biometricEnabled ? const BiometricLockScreen() : const HomeShell();
+    } else {
+      destination = const WelcomeScreen();
+    }
+    if (!mounted) return;
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => destination),
@@ -62,6 +69,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Center(

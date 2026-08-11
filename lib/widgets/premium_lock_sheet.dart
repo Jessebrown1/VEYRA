@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../state/theme_controller.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_effects.dart';
 import '../theme/app_spacing.dart';
@@ -15,6 +17,7 @@ Future<void> showPremiumLockSheet(
     backgroundColor: AppColors.elevated,
     isScrollControlled: true,
     builder: (context) {
+      context.watch<ThemeController>();
       return Padding(
         padding: EdgeInsets.only(
           left: AppSpacing.lg,
@@ -42,14 +45,14 @@ Future<void> showPremiumLockSheet(
               height: 52,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: const LinearGradient(
+                gradient: LinearGradient(
                   colors: [AppColors.champagne, AppColors.accent],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 boxShadow: AppShadows.accentGlow,
               ),
-              child: const Icon(Icons.auto_awesome, color: AppColors.background, size: 24),
+              child: Icon(Icons.auto_awesome, color: AppColors.background, size: 24),
             ),
             const SizedBox(height: AppSpacing.md),
             Text('VEYRA+', style: AppTextStyles.eyebrow),
@@ -91,11 +94,12 @@ class _FeatureLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          const Icon(Icons.check, size: 16, color: AppColors.champagne),
+          Icon(Icons.check, size: 16, color: AppColors.champagne),
           const SizedBox(width: 8),
           Text(text, style: AppTextStyles.body),
         ],

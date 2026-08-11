@@ -5,6 +5,7 @@ import '../models/user_profile.dart';
 import '../services/api_client.dart';
 import '../services/auth_api_service.dart';
 import '../services/avatar_api_service.dart';
+import '../services/biometric_service.dart';
 import '../services/companion_api_service.dart';
 import '../services/conversation_api_service.dart';
 import '../services/entitlements_api_service.dart';
@@ -29,6 +30,7 @@ class AppState extends ChangeNotifier {
   late final WallpaperApiService wallpaperApi = WallpaperApiService(apiClient);
   late final EntitlementsApiService entitlementsApi = EntitlementsApiService(apiClient);
   late final SettingsApiService settingsApi = SettingsApiService(apiClient);
+  final BiometricService biometrics = BiometricService();
 
   AppLaunchStatus status = AppLaunchStatus.loading;
   UserProfile? user;

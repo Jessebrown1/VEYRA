@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../models/avatar_config.dart';
 import '../../services/api_client.dart';
 import '../../state/app_state.dart';
@@ -8,7 +9,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../theme/app_text_styles.dart';
 import '../../widgets/primary_button.dart';
-import 'personalized_welcome_screen.dart';
+import '../home/home_shell.dart';
 
 class CompanionCreationScreen extends StatefulWidget {
   const CompanionCreationScreen({super.key});
@@ -85,8 +86,9 @@ class _CompanionCreationScreenState extends State<CompanionCreationScreen>
       await appState.completeOnboarding(updatedUser, companion);
       if (!mounted) return;
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const PersonalizedWelcomeScreen()),
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const HomeShell()),
+        (route) => false,
       );
     } catch (e) {
       if (!mounted) return;
@@ -96,6 +98,7 @@ class _CompanionCreationScreenState extends State<CompanionCreationScreen>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final companionName = context.read<OnboardingController>().companionName;
 
     return Scaffold(
@@ -125,11 +128,11 @@ class _CompanionCreationScreenState extends State<CompanionCreationScreen>
                             Container(
                               width: 56,
                               height: 56,
-                              decoration: const BoxDecoration(
+                              decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 gradient: AppColors.accentGradient,
                               ),
-                              child: const Icon(Icons.auto_awesome, color: AppColors.background, size: 24),
+                              child: Icon(Icons.auto_awesome, color: AppColors.background, size: 24),
                             ),
                           ],
                         );

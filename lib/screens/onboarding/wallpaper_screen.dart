@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../models/wallpaper_catalog_item.dart';
 import '../../state/app_state.dart';
 import '../../state/onboarding_controller.dart';
@@ -38,6 +39,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final controller = context.watch<OnboardingController>();
     final wallpapers = _wallpapers;
 
@@ -47,7 +49,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
       title: 'Choose their world.',
       subtitle: 'You can change this any time.',
       child: wallpapers == null
-          ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
           : GridView.count(
               crossAxisCount: 2,
               mainAxisSpacing: AppSpacing.sm,
@@ -90,7 +92,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                           ),
                         ),
                         if (isSelected)
-                          const Positioned(
+                          Positioned(
                             right: AppSpacing.sm,
                             top: AppSpacing.sm,
                             child: Icon(Icons.check_circle, color: AppColors.accent, size: 20),
@@ -109,7 +111,7 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
                                 ),
                               ),
                               if (option.isPremium)
-                                const Icon(Icons.lock, size: 12, color: AppColors.textMuted),
+                                Icon(Icons.lock, size: 12, color: AppColors.textMuted),
                             ],
                           ),
                         ),

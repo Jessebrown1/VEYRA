@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../data/personality_catalog.dart';
 import '../../data/relationship_catalog.dart';
 import '../../data/term_of_address_catalog.dart';
@@ -64,6 +65,7 @@ class _CompanionScreenState extends State<CompanionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final companion = context.watch<AppState>().companion!;
     final personality = PersonalityCatalog.byId(companion.personalityId);
     final relationship = RelationshipCatalog.byId(companion.relationshipId);
@@ -86,7 +88,7 @@ class _CompanionScreenState extends State<CompanionScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
       body: !_loaded
-          ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
+          ? Center(child: CircularProgressIndicator(color: AppColors.accent))
           : ListView(
               padding: EdgeInsets.zero,
               children: [
@@ -199,6 +201,7 @@ class _InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.sm),
       padding: const EdgeInsets.all(AppSpacing.md),

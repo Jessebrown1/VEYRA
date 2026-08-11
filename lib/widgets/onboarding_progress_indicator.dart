@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../state/theme_controller.dart';
 import '../theme/app_colors.dart';
 
 class OnboardingProgressIndicator extends StatelessWidget {
@@ -13,6 +15,7 @@ class OnboardingProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Row(
       children: List.generate(totalSteps, (index) {
         final isActive = index < step;

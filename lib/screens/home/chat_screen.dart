@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../models/chat_message_entry.dart';
 import '../../services/api_client.dart';
 import '../../state/app_state.dart';
@@ -117,6 +118,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final appState = context.watch<AppState>();
     final companion = appState.companion!;
     final wallpaperId = companion.wallpaperId;
@@ -133,7 +135,7 @@ class _ChatScreenState extends State<ChatScreen> {
               width: 34,
               height: 34,
               padding: const EdgeInsets.all(1.5),
-              decoration: const BoxDecoration(shape: BoxShape.circle, gradient: AppColors.accentGradient),
+              decoration: BoxDecoration(shape: BoxShape.circle, gradient: AppColors.accentGradient),
               child: CircleAvatar(
                 backgroundColor: AppColors.surface,
                 child: Text(
@@ -160,7 +162,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 if (wallpaperId != null) SizedBox(height: kToolbarHeight),
                 Expanded(
                   child: _loading
-                      ? const Center(child: CircularProgressIndicator(color: AppColors.accent))
+                      ? Center(child: CircularProgressIndicator(color: AppColors.accent))
                       : ListView.builder(
                           controller: _scrollController,
                           padding: const EdgeInsets.symmetric(
@@ -196,7 +198,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       children: [
                         IconButton(
                           onPressed: _cameraComingSoon,
-                          icon: const Icon(Icons.camera_alt_outlined, color: AppColors.textSecondary),
+                          icon: Icon(Icons.camera_alt_outlined, color: AppColors.textSecondary),
                         ),
                         Expanded(
                           child: TextField(
@@ -216,7 +218,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ),
                         IconButton(
                           onPressed: _voiceComingSoon,
-                          icon: const Icon(Icons.mic_off_outlined, color: AppColors.textMuted),
+                          icon: Icon(Icons.mic_off_outlined, color: AppColors.textMuted),
                           tooltip: 'Voice — coming soon',
                         ),
                         Container(
@@ -254,6 +256,7 @@ class _MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final fromCompanion = message.isFromCompanion;
     return Align(
       alignment: fromCompanion ? Alignment.centerLeft : Alignment.centerRight,
@@ -289,6 +292,7 @@ class _TypingBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
@@ -307,7 +311,7 @@ class _TypingBubble extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(
+            SizedBox(
               width: 12,
               height: 12,
               child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.accent),

@@ -72,6 +72,23 @@ class OnboardingController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Applies a whole curated look at once (see AvatarLookPreset) rather than
+  /// setting each layer category individually.
+  void applyAvatarLook({
+    required String skinId,
+    required String hairId,
+    required String eyeId,
+    required String outfitId,
+    String? accessoryId,
+  }) {
+    skinAssetId = skinId;
+    hairAssetId = hairId;
+    eyeAssetId = eyeId;
+    outfitAssetId = outfitId;
+    accessoryAssetId = accessoryId;
+    notifyListeners();
+  }
+
   void setWallpaper(String id) {
     wallpaperId = id;
     notifyListeners();

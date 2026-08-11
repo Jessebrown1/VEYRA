@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../state/theme_controller.dart';
 import '../../state/onboarding_controller.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
@@ -35,12 +36,13 @@ class _CompanionNameScreenState extends State<CompanionNameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ThemeController>();
     final name = _controller.text.trim();
 
     return OnboardingScaffold(
       step: 3,
       totalSteps: 8,
-      title: 'What should I call you?',
+      title: 'What should my name be?',
       subtitle: "This is their name. You'll see it throughout VEYRA.",
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,9 +59,9 @@ class _CompanionNameScreenState extends State<CompanionNameScreen> {
               hintStyle: AppTextStyles.hero.copyWith(color: AppColors.textMuted),
               filled: false,
               contentPadding: EdgeInsets.zero,
-              border: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
-              enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
-              focusedBorder: const UnderlineInputBorder(
+              border: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.divider)),
+              focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: AppColors.accent, width: 2),
               ),
             ),
@@ -73,7 +75,7 @@ class _CompanionNameScreenState extends State<CompanionNameScreen> {
                     padding: const EdgeInsets.only(top: AppSpacing.lg),
                     child: Row(
                       children: [
-                        const Icon(Icons.auto_awesome, size: 16, color: AppColors.accent),
+                        Icon(Icons.auto_awesome, size: 16, color: AppColors.accent),
                         const SizedBox(width: AppSpacing.xs),
                         Text('Nice to meet you, $name.', style: AppTextStyles.bodyEmphasis),
                       ],
