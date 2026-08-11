@@ -4,8 +4,11 @@ databases:
     region: oregon
 
 services:
-  # FastAPI AI service — Gemini's free tier stands in for local Ollama here,
+  # FastAPI AI service — Groq's free tier stands in for local Ollama here,
   # since Render's free/starter plans don't have the RAM to run a local model.
+  # Groq handles chat replies (much higher free-tier rate limits than
+  # Gemini); Gemini still handles embeddings since Groq has no embeddings
+  # endpoint.
   - name: veyra-ai-service
     type: web
     runtime: python
@@ -18,7 +21,11 @@ services:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: MODEL_PROVIDER
-        value: gemini
+        value: groq
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_CHAT_MODEL
+        value: llama-3.3-70b-versatile
       - key: GEMINI_API_KEY
         sync: false
       - key: GEMINI_CHAT_MODEL
