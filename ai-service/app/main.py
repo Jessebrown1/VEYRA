@@ -1,0 +1,22 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from .routers import embed, generate, memory
+
+app = FastAPI(title="VEYRA AI Service")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(generate.router)
+app.include_router(memory.router)
+app.include_router(embed.router)
+
+
+@app.get("/health")
+async def health() -> dict:
+    return {"status": "ok"}

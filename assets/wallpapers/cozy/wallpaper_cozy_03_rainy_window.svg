@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#1B1E22" />
+<stop offset="100%" stop-color="#11141A" />
+</linearGradient>
+</defs>
+
+<rect width="400" height="800" fill="url(#bg)" />
+<line x1="20" y1="-20" x2="5" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="42" y1="-20" x2="27" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="64" y1="-20" x2="49" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="86" y1="-20" x2="71" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="108" y1="-20" x2="93" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="130" y1="-20" x2="115" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="152" y1="-20" x2="137" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="174" y1="-20" x2="159" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="196" y1="-20" x2="181" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="218" y1="-20" x2="203" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="240" y1="-20" x2="225" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="262" y1="-20" x2="247" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="284" y1="-20" x2="269" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="306" y1="-20" x2="291" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="328" y1="-20" x2="313" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="350" y1="-20" x2="335" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="372" y1="-20" x2="357" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="394" y1="-20" x2="379" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="416" y1="-20" x2="401" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<line x1="438" y1="-20" x2="423" y2="820" stroke="#3A4650" stroke-width="1.4" opacity="0.35" />
+<path d="M0 600.0 Q 100.0 584.0 200.0 600.0 T 400 600.0 L 400 800 L 0 800 Z" fill="#171B20" />
+
+</svg>

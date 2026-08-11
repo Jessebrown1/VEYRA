@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 800">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0C1712" />
+<stop offset="100%" stop-color="#08100D" />
+</linearGradient>
+</defs>
+
+<rect width="400" height="800" fill="url(#bg)" />
+<circle cx="311.5" cy="363.4" r="1.2" fill="#FFFFFF" opacity="0.46" />
+<circle cx="10.2" cy="295.0" r="1.2" fill="#FFFFFF" opacity="0.76" />
+<circle cx="151.8" cy="341.2" r="0.9" fill="#FFFFFF" opacity="0.78" />
+<circle cx="287.3" cy="188.0" r="1.2" fill="#FFFFFF" opacity="0.71" />
+<circle cx="83.3" cy="248.1" r="1.6" fill="#FFFFFF" opacity="0.46" />
+<circle cx="315.3" cy="304.8" r="1.6" fill="#FFFFFF" opacity="0.50" />
+<circle cx="45.4" cy="354.1" r="1.6" fill="#FFFFFF" opacity="0.57" />
+<circle cx="45.6" cy="94.8" r="1.4" fill="#FFFFFF" opacity="0.47" />
+<circle cx="371.5" cy="263.1" r="0.8" fill="#FFFFFF" opacity="0.69" />
+<circle cx="146.9" cy="411.1" r="1.7" fill="#FFFFFF" opacity="0.61" />
+<circle cx="254.9" cy="310.1" r="1.6" fill="#FFFFFF" opacity="0.89" />
+<circle cx="20.8" cy="165.4" r="1.3" fill="#FFFFFF" opacity="0.48" />
+<circle cx="233.9" cy="48.6" r="1.7" fill="#FFFFFF" opacity="0.62" />
+<circle cx="54.4" cy="295.0" r="1.0" fill="#FFFFFF" opacity="0.42" />
+<circle cx="193.8" cy="69.4" r="0.9" fill="#FFFFFF" opacity="0.82" />
+<circle cx="275.3" cy="15.4" r="1.5" fill="#FFFFFF" opacity="0.31" />
+<circle cx="136.5" cy="398.9" r="1.3" fill="#FFFFFF" opacity="0.48" />
+<circle cx="153.4" cy="177.3" r="0.8" fill="#FFFFFF" opacity="0.90" />
+<circle cx="30.5" cy="191.8" r="1.5" fill="#FFFFFF" opacity="0.54" />
+<circle cx="382.8" cy="115.5" r="1.8" fill="#FFFFFF" opacity="0.84" />
+<circle cx="320" cy="110" r="34" fill="#F5F1E6" opacity="0.95" />
+  <circle cx="331.9" cy="104.9" r="29.92" fill="url(#bg)" />
+<path d="M-20 576.0 L7 435 L35 576.0 Z" fill="#0E1D16" />
+<path d="M11 576.0 L31 391 L51 576.0 Z" fill="#0E1D16" />
+<path d="M39 576.0 L60 387 L82 576.0 Z" fill="#0E1D16" />
+<path d="M70 576.0 L91 418 L112 576.0 Z" fill="#0E1D16" />
+<path d="M97 576.0 L126 409 L155 576.0 Z" fill="#0E1D16" />
+<path d="M143 576.0 L168 469 L192 576.0 Z" fill="#0E1D16" />
+<path d="M170 576.0 L208 430 L247 576.0 Z" fill="#0E1D16" />
+<path d="M227 576.0 L254 401 L282 576.0 Z" fill="#0E1D16" />
+<path d="M271 576.0 L297 475 L322 576.0 Z" fill="#0E1D16" />
+<path d="M311 576.0 L339 406 L367 576.0 Z" fill="#0E1D16" />
+<path d="M341 576.0 L365 457 L389 576.0 Z" fill="#0E1D16" />
+<path d="M371 576.0 L395 397 L419 576.0 Z" fill="#0E1D16" />
+<path d="M412 576.0 L433 389 L454 576.0 Z" fill="#0E1D16" />
+
+</svg>
