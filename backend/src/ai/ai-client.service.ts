@@ -60,15 +60,29 @@ export class AiClientService {
   }
 
   private async post<T>(path: string, body: unknown): Promise<T> {
-    try {
-      const { data } = await this.http.post<T>(path, body);
-      return data;
-    } catch (err) {
-      this.logger.error(`AI service call failed: ${path} — ${(err as Error).message}`);
-      throw new ServiceUnavailableException({
-        code: 'AI_SERVICE_UNAVAILABLE',
-        message: 'Your companion is having trouble responding right now. Try again in a moment.',
-      });
+    // The AI service is on Render's free tier and spins down after 15 minutes
+    // idle — the first request after that hits a cold, not-yet-listening
+    // process and gets rejected almost instantly (not a slow timeout), so a
+    // short retry with backoff gives it time to finish booting rather than
+    // failing the user's message outright.
+    const delaysMs = [4_000, 8_000];
+    for (let attempt = 0; ; attempt++) {
+      try {
+        const { data } = await this.http.post<T>(path, body);
+        return data;
+      } catch (err) {
+        if (attempt >= delaysMs.length) {
+          this.logger.error(`AI service call failed: ${path} — ${(err as Error).message}`);
+          throw new ServiceUnavailableException({
+            code: 'AI_SERVICE_UNAVAILABLE',
+            message: 'Your companion is having trouble responding right now. Try again in a moment.',
+          });
+        }
+        this.logger.warn(
+          `AI service call failed (attempt ${attempt + 1}), retrying in ${delaysMs[attempt]}ms: ${path} — ${(err as Error).message}`,
+        );
+        await new Promise((resolve) => setTimeout(resolve, delaysMs[attempt]));
+      }
     }
   }
 
