@@ -32,5 +32,19 @@ async def debug_models() -> dict:
             params={"key": GEMINI_API_KEY},
         )
         data = resp.json()
-        names = [m.get("name") for m in data.get("models", [])]
-        return {"status": resp.status_code, "models": names}
+        models = [
+            {"name": m.get("name"), "methods": m.get("supportedGenerationMethods")}
+            for m in data.get("models", [])
+        ]
+        return {"status": resp.status_code, "models": models}
+
+
+@app.get("/_debug/try/{model_name}")
+async def debug_try(model_name: str) -> dict:
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent",
+            params={"key": GEMINI_API_KEY},
+            json={"contents": [{"role": "user", "parts": [{"text": "say hi"}]}]},
+        )
+        return {"status": resp.status_code, "body": resp.text[:2000]}
