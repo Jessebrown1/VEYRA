@@ -65,7 +65,10 @@ export class AiClientService {
     // process and gets rejected almost instantly (not a slow timeout), so a
     // short retry with backoff gives it time to finish booting rather than
     // failing the user's message outright.
-    const delaysMs = [4_000, 8_000];
+    // Render's own free-tier disclaimer is "50 seconds or more" to cold-boot
+    // a sleeping service — budget close to that (the Flutter client's own
+    // receiveTimeout is 90s) rather than giving up after a token retry.
+    const delaysMs = [3_000, 6_000, 12_000, 20_000];
     for (let attempt = 0; ; attempt++) {
       try {
         const { data } = await this.http.post<T>(path, body);
