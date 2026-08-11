@@ -108,4 +108,15 @@ export class AiClientService {
   embed(text: string) {
     return this.post<{ embedding: number[] }>('/embed', { text });
   }
+
+  /** Fire-and-forget nudge to start the AI service's cold boot as early as
+   * possible (called from the app's launch screen, well before the user
+   * reaches chat) — a long-idle free-tier instance can take minutes to wake,
+   * far more than any request-time retry budget can cover, so getting a
+   * head start during onboarding is the real mitigation. */
+  warmup(): void {
+    this.http.get('/health', { timeout: 5_000 }).catch(() => {
+      // Expected while cold — the request itself is what triggers the wake.
+    });
+  }
 }

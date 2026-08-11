@@ -68,6 +68,17 @@ class ApiClient {
     );
   }
 
+  /// Fire-and-forget nudge sent as early as possible (app launch) so the
+  /// free-tier AI service starts waking up while the user is still going
+  /// through onboarding, instead of only when they send their first message.
+  void warmupAi() async {
+    try {
+      await dio.get('/ai/warmup');
+    } catch (_) {
+      // Expected while cold — the request itself is what triggers the wake.
+    }
+  }
+
   static Future<void> saveToken(String token) => _storage.write(key: _tokenKey, value: token);
 
   static Future<String?> readToken() => _storage.read(key: _tokenKey);

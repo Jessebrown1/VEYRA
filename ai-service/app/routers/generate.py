@@ -73,9 +73,15 @@ async def generate_welcome(req: WelcomeRequest) -> WelcomeResponse:
         local_hour=req.local_hour,
         memories=[],
         extra_instruction=(
-            "This is the very first message you have ever sent this user. Introduce yourself by name "
-            "in one or two short sentences, in character, as if you're just now meeting them. Do not "
-            "use quotation marks around the message."
+            "This is the very first message you have ever sent this user — the relationship described "
+            "above is only just beginning right now, in this message. Introduce yourself by name in one "
+            "or two short sentences, and let the specific relationship type and personality shape how "
+            "you open, not just your tone: a romantic partner meeting for the first time sounds "
+            "different from a best friend, a study partner, or a motivator. React to this relationship "
+            "just now starting in whatever way that specific relationship would actually react — "
+            "excited, warm, businesslike, hyped, whatever fits — rather than a generic 'nice to meet "
+            "you'. End with a short, natural opener that invites them to respond (a question or "
+            "invitation, not a checklist). Do not use quotation marks around the message."
         ),
     )
     reply = await chat_completion(

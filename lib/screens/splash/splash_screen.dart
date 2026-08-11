@@ -41,6 +41,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   Future<void> _bootstrap() async {
     final appState = context.read<AppState>();
+    // Fire-and-forget — nudges the free-tier AI service awake immediately so
+    // it has the whole login/onboarding flow as a head start before the
+    // first message actually needs a reply.
+    appState.apiClient.warmupAi();
     await appState.loadFromSession();
     if (!mounted) return;
 
