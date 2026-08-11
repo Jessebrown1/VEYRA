@@ -30,7 +30,7 @@ class PersonalityScreen extends StatelessWidget {
 
     return OnboardingScaffold(
       step: 1,
-      totalSteps: 8,
+      totalSteps: 7,
       title: 'How should they be?',
       child: ListView.separated(
         itemCount: PersonalityCatalog.all.length,

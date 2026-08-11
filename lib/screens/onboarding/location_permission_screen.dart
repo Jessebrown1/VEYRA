@@ -43,8 +43,8 @@ class _LocationPermissionScreenState extends State<LocationPermissionScreen> {
   Widget build(BuildContext context) {
     context.watch<ThemeController>();
     return OnboardingScaffold(
-      step: 7,
-      totalSteps: 8,
+      step: 6,
+      totalSteps: 7,
       title: 'Let me know where you are.',
       child: SingleChildScrollView(
         child: Column(

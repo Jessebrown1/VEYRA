@@ -144,8 +144,16 @@ export class ConversationsService {
     });
     recentMessages.reverse();
 
-    const { embedding } = await this.ai.embed(content);
-    const relevantMemories = await this.memories.retrieveRelevant(companion.id, embedding);
+    // Memory retrieval is a nice-to-have on top of the reply, not a
+    // precondition for it — a rate-limited or slow embedding call shouldn't
+    // block the companion from responding at all.
+    let relevantMemories: string[] = [];
+    try {
+      const { embedding } = await this.ai.embed(content);
+      relevantMemories = await this.memories.retrieveRelevant(companion.id, embedding);
+    } catch (err) {
+      this.logger.warn(`Memory retrieval skipped (non-fatal): ${(err as Error).message}`);
+    }
 
     const { reply } = await this.ai.generateReply({
       companion_name: companion.name,

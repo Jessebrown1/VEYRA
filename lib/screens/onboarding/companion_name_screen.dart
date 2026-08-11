@@ -41,7 +41,7 @@ class _CompanionNameScreenState extends State<CompanionNameScreen> {
 
     return OnboardingScaffold(
       step: 3,
-      totalSteps: 8,
+      totalSteps: 7,
       title: 'What should my name be?',
       subtitle: "This is their name. You'll see it throughout VEYRA.",
       child: Column(

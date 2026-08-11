@@ -44,7 +44,7 @@ class RelationshipScreen extends StatelessWidget {
 
     return OnboardingScaffold(
       step: 2,
-      totalSteps: 8,
+      totalSteps: 7,
       title: 'What would you like your relationship to be?',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

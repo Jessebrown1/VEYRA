@@ -47,8 +47,8 @@ class _NotificationPermissionScreenState extends State<NotificationPermissionScr
     final companionName = context.watch<OnboardingController>().companionName;
 
     return OnboardingScaffold(
-      step: 8,
-      totalSteps: 8,
+      step: 7,
+      totalSteps: 7,
       title: "Let $companionName check in on you.",
       child: SingleChildScrollView(
         child: Column(

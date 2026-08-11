@@ -44,8 +44,8 @@ class _WallpaperScreenState extends State<WallpaperScreen> {
     final wallpapers = _wallpapers;
 
     return OnboardingScaffold(
-      step: 6,
-      totalSteps: 8,
+      step: 5,
+      totalSteps: 7,
       title: 'Choose their world.',
       subtitle: 'You can change this any time.',
       child: wallpapers == null
