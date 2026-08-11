@@ -1,6 +1,8 @@
+import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .config import GEMINI_API_KEY
 from .routers import embed, generate, memory
 
 app = FastAPI(title="VEYRA AI Service")
@@ -20,3 +22,15 @@ app.include_router(embed.router)
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok"}
+
+
+@app.get("/_debug/models")
+async def debug_models() -> dict:
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.get(
+            "https://generativelanguage.googleapis.com/v1beta/models",
+            params={"key": GEMINI_API_KEY},
+        )
+        data = resp.json()
+        names = [m.get("name") for m in data.get("models", [])]
+        return {"status": resp.status_code, "models": names}
