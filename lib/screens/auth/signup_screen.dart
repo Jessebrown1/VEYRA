@@ -25,6 +25,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _passwordController = TextEditingController();
 
   bool _submitting = false;
+  String? _errorMessage;
 
   bool get _canContinue =>
       _emailController.text.trim().contains('@') &&
@@ -32,7 +33,10 @@ class _SignupScreenState extends State<SignupScreen> {
       !_submitting;
 
   Future<void> _continue() async {
-    setState(() => _submitting = true);
+    setState(() {
+      _submitting = true;
+      _errorMessage = null;
+    });
 
     try {
       final appState = context.read<AppState>();
@@ -75,11 +79,7 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(exception.message),
-          ),
-        );
+        setState(() => _errorMessage = exception.message);
       }
     } finally {
       if (mounted) {
@@ -383,7 +383,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   hint: 'Email address',
                                   keyboardType:
                                       TextInputType.emailAddress,
-                                  onChanged: (_) => setState(() {}),
+                                  onChanged: (_) => setState(() => _errorMessage = null),
                                 ),
                               ),
 
@@ -407,9 +407,39 @@ class _SignupScreenState extends State<SignupScreen> {
                                   controller: _passwordController,
                                   hint: 'Create a password',
                                   obscureText: true,
-                                  onChanged: (_) => setState(() {}),
+                                  onChanged: (_) => setState(() => _errorMessage = null),
                                 ),
                               ),
+
+                              if (_errorMessage != null) ...[
+                                const SizedBox(height: 12),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.danger.withOpacity(0.10),
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(color: AppColors.danger.withOpacity(0.35)),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(Icons.error_outline_rounded, size: 16, color: AppColors.danger),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _errorMessage!,
+                                          style: TextStyle(
+                                            color: AppColors.danger,
+                                            fontSize: 12.5,
+                                            height: 1.35,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
 
                               const SizedBox(height: 12),
 

@@ -25,6 +25,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
 
   bool _savingName = false;
   bool _changingPassword = false;
+  String? _passwordError;
 
   @override
   void initState() {
@@ -90,26 +91,19 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     final confirm = _confirmPasswordController.text;
 
     if (next.length < 8) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'New password must be at least 8 characters.',
-          ),
-        ),
-      );
+      setState(() => _passwordError = 'New password must be at least 8 characters.');
       return;
     }
 
     if (next != confirm) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Passwords don't match."),
-        ),
-      );
+      setState(() => _passwordError = "Passwords don't match.");
       return;
     }
 
-    setState(() => _changingPassword = true);
+    setState(() {
+      _changingPassword = true;
+      _passwordError = null;
+    });
 
     try {
       await context.read<AppState>().authApi.changePassword(
@@ -131,13 +125,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
     } catch (e) {
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            ApiClient.toApiException(e).message,
-          ),
-        ),
-      );
+      setState(() => _passwordError = ApiClient.toApiException(e).message);
     } finally {
       if (mounted) {
         setState(() => _changingPassword = false);
@@ -269,7 +257,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                     controller: _currentPasswordController,
                     hint: 'Current password',
                     obscureText: true,
-                    onChanged: (_) => setState(() {}),
+                    onChanged: (_) => setState(() => _passwordError = null),
                   ),
 
                   const SizedBox(height: AppSpacing.sm),
@@ -278,7 +266,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                     controller: _newPasswordController,
                     hint: 'New password',
                     obscureText: true,
-                    onChanged: (_) => setState(() {}),
+                    onChanged: (_) => setState(() => _passwordError = null),
                   ),
 
                   const SizedBox(height: AppSpacing.sm),
@@ -287,7 +275,7 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                     controller: _confirmPasswordController,
                     hint: 'Confirm new password',
                     obscureText: true,
-                    onChanged: (_) => setState(() {}),
+                    onChanged: (_) => setState(() => _passwordError = null),
                   ),
 
                   const SizedBox(height: AppSpacing.md),
@@ -295,6 +283,35 @@ class _AccountSettingsScreenState extends State<AccountSettingsScreen> {
                   _PasswordRequirements(
                     password: _newPasswordController.text,
                   ),
+
+                  if (_passwordError != null) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.smd,
+                        vertical: AppSpacing.sm,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.danger.withValues(alpha: 0.10),
+                        borderRadius: BorderRadius.circular(AppRadii.md),
+                        border: Border.all(color: AppColors.danger.withValues(alpha: 0.35)),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.error_outline_rounded, size: 16, color: AppColors.danger),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              _passwordError!,
+                              style: AppTextStyles.caption.copyWith(color: AppColors.danger),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
 
                   const SizedBox(height: AppSpacing.md),
 

@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   bool _submitting = false;
+  String? _errorMessage;
 
   bool get _canContinue =>
       _emailController.text.trim().contains('@') &&
@@ -39,7 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
       !_submitting;
 
   Future<void> _continue() async {
-    setState(() => _submitting = true);
+    setState(() {
+      _submitting = true;
+      _errorMessage = null;
+    });
 
     try {
       final appState = context.read<AppState>();
@@ -70,13 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (!mounted) return;
 
-      final message = ApiClient.toApiException(e).message;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-        ),
-      );
+      setState(() => _errorMessage = ApiClient.toApiException(e).message);
     } finally {
       if (mounted) {
         setState(() => _submitting = false);
@@ -428,7 +426,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   hint: 'Email address',
                                   keyboardType:
                                       TextInputType.emailAddress,
-                                  onChanged: (_) => setState(() {}),
+                                  onChanged: (_) => setState(() => _errorMessage = null),
                                 ),
                               ),
 
@@ -457,9 +455,39 @@ class _LoginScreenState extends State<LoginScreen> {
                                   controller: _passwordController,
                                   hint: 'Password',
                                   obscureText: true,
-                                  onChanged: (_) => setState(() {}),
+                                  onChanged: (_) => setState(() => _errorMessage = null),
                                 ),
                               ),
+
+                              if (_errorMessage != null) ...[
+                                const SizedBox(height: 12),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.danger.withOpacity(0.10),
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(color: AppColors.danger.withOpacity(0.35)),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(Icons.error_outline_rounded, size: 16, color: AppColors.danger),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _errorMessage!,
+                                          style: TextStyle(
+                                            color: AppColors.danger,
+                                            fontSize: 12.5,
+                                            height: 1.35,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
 
                               const SizedBox(height: 7),
 
