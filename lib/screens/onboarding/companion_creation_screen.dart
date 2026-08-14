@@ -76,6 +76,7 @@ class _CompanionCreationScreenState extends State<CompanionCreationScreen>
       await appState.settingsApi.updateLocationSettings(
         enabled: onboarding.locationEnabled,
         permissionType: onboarding.locationEnabled ? 'approximate' : 'none',
+        lastArea: onboarding.locationArea,
       );
 
       // Brief, deliberate pause so "Creating Luna…" reads as a real moment

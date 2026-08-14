@@ -21,6 +21,7 @@ class OnboardingController extends ChangeNotifier {
 
   String? wallpaperId;
   bool locationEnabled = false;
+  String? locationArea;
   bool notificationsEnabled = false;
 
   void setUserEmail(String value) {
@@ -94,8 +95,9 @@ class OnboardingController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setLocationEnabled(bool value) {
+  void setLocationEnabled(bool value, {String? area}) {
     locationEnabled = value;
+    locationArea = area;
     notifyListeners();
   }
 
@@ -118,6 +120,7 @@ class OnboardingController extends ChangeNotifier {
     accessoryAssetId = null;
     wallpaperId = null;
     locationEnabled = false;
+    locationArea = null;
     notificationsEnabled = false;
     notifyListeners();
   }

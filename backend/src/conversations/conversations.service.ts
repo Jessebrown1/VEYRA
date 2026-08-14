@@ -155,6 +155,9 @@ export class ConversationsService {
       this.logger.warn(`Memory retrieval skipped (non-fatal): ${(err as Error).message}`);
     }
 
+    const locationSettings = await this.prisma.locationSettings.findUnique({ where: { userId } });
+    const areaHint = locationSettings?.enabled ? locationSettings.lastArea : null;
+
     const { reply } = await this.ai.generateReply({
       companion_name: companion.name,
       personality_traits: companion.personalityTraits as Record<string, number>,
@@ -163,6 +166,7 @@ export class ConversationsService {
       user_term: this.userTermFor(companion),
       local_hour: this.localHourFor(user.timezone),
       memories: relevantMemories,
+      area_hint: areaHint,
       recent_messages: recentMessages.map((m) => ({
         sender: m.sender as 'user' | 'companion',
         content: m.content,

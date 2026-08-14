@@ -8,6 +8,7 @@ import '../../../theme/app_colors.dart';
 import '../../../theme/app_effects.dart';
 import '../../../theme/app_spacing.dart';
 import '../../../theme/app_text_styles.dart';
+import '../../../widgets/primary_button.dart';
 
 class LocationSettingsScreen extends StatefulWidget {
   const LocationSettingsScreen({super.key});
@@ -36,6 +37,7 @@ class _LocationSettingsScreenState extends State<LocationSettingsScreen> {
   Future<void> _toggleEnabled(bool value) async {
     setState(() => _busy = true);
     try {
+      String? area;
       if (value) {
         final result = await _locationService.requestPermission();
         if (result != LocationPermissionResult.granted) {
@@ -47,11 +49,41 @@ class _LocationSettingsScreenState extends State<LocationSettingsScreen> {
           setState(() => _busy = false);
           return;
         }
+        area = await _locationService.getApproximateArea();
       }
       final updated = await context.read<AppState>().settingsApi.updateLocationSettings(
             enabled: value,
             permissionType: value ? 'approximate' : 'none',
+            lastArea: area,
           );
+      if (!mounted) return;
+      setState(() => _settings = updated);
+      if (value && area == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Couldn't determine your area yet — try refreshing in a moment.")),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(ApiClient.toApiException(e).message)));
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _refreshArea() async {
+    setState(() => _busy = true);
+    try {
+      final area = await _locationService.getApproximateArea();
+      if (area == null) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text("Couldn't determine your area right now.")));
+        return;
+      }
+      final updated =
+          await context.read<AppState>().settingsApi.updateLocationSettings(lastArea: area);
       if (!mounted) return;
       setState(() => _settings = updated);
     } catch (e) {
@@ -109,10 +141,19 @@ class _LocationSettingsScreenState extends State<LocationSettingsScreen> {
                     'Permission: ${settings['permissionType'] ?? 'approximate'}',
                     style: AppTextStyles.caption,
                   ),
-                  if ((settings['lastArea'] as String?)?.isNotEmpty == true) ...[
-                    const SizedBox(height: AppSpacing.xs),
-                    Text('Last known area: ${settings['lastArea']}', style: AppTextStyles.caption),
-                  ],
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    (settings['lastArea'] as String?)?.isNotEmpty == true
+                        ? 'Approximate area: ${settings['lastArea']}'
+                        : 'Approximate area: not determined yet',
+                    style: AppTextStyles.caption,
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  PrimaryButton(
+                    label: _busy ? 'Refreshing…' : 'Refresh location',
+                    enabled: !_busy,
+                    onPressed: _refreshArea,
+                  ),
                 ],
               ],
             ),
